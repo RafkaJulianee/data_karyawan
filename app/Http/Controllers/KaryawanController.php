@@ -1,8 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
-
-use Illuminate\Http\Request;
+use App\Models\Karyawan;
+use App\Models\User;
+use App\Models\Jabatan;
+use App\Http\Requests\StoreKaryawanRequest;
+use App\Http\Requests\UpdateKaryawanRequest;
+use Inertia\Inertia;
 
 class KaryawanController extends Controller
 {
@@ -11,7 +14,13 @@ class KaryawanController extends Controller
      */
     public function index()
     {
-        //
+        $karyawans = Karyawan::with(['user', 'jabatan'])
+                        ->latest()
+                        ->get();
+
+        return Inertia::render('Karyawan/Index', [
+            'karyawans' => $karyawans
+        ]);
     }
 
     /**
@@ -19,21 +28,31 @@ class KaryawanController extends Controller
      */
     public function create()
     {
-        //
+        $users = User::all();
+        $jabatans = Jabatan::all();
+
+        return Inertia::render('Karyawan/Create', [
+            'users' => $users,
+            'jabatans' => $jabatans
+        ]);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreKaryawanRequest $request)
     {
-        //
+        Karyawan::create($request->validated());
+
+        return redirect()
+            ->route('karyawan.index')
+            ->with('message', 'Data karyawan berhasil ditambahkan');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Karyawan $karyawan)
     {
         //
     }
@@ -41,24 +60,36 @@ class KaryawanController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Karyawan $karyawan)
     {
-        //
+        $jabatans = Jabatan::all();
+        return Inertia::render('Karyawan/Edit', [
+            'karyawan' => $karyawan,
+            'jabatans' => $jabatans
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdateKaryawanRequest $request, Karyawan $karyawan)
     {
-        //
+        $karyawan->update($request->validated());
+
+        return redirect()
+            ->route('karyawan.index')
+            ->with('message', 'Data karyawan berhasil diupdate');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Karyawan $karyawan)
     {
-        //
+        $karyawan->delete();
+
+        return redirect()
+            ->route('karyawan.index')
+            ->with('message', 'Data karyawan berhasil dihapus');
     }
 }

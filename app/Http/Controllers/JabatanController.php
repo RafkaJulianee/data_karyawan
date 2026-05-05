@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
-
-use Illuminate\Http\Request;
+use App\Models\Jabatan;
+use App\Http\Requests\StoreJabatanRequest;
+use App\Http\Requests\UpdateJabatanRequest;
+use Inertia\Inertia;
 
 class JabatanController extends Controller
 {
@@ -11,7 +12,10 @@ class JabatanController extends Controller
      */
     public function index()
     {
-        //
+        $jabatans = Jabatan::latest()->get();
+        return Inertia::render('Jabatan/Index', [
+            'jabatans' => $jabatans
+        ]);
     }
 
     /**
@@ -19,21 +23,25 @@ class JabatanController extends Controller
      */
     public function create()
     {
-        //
+        return Inertia::render('Jabatan/Create');
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreJabatanRequest $request)
     {
-        //
+        Jabatan::create($request->validated());
+
+        return redirect()
+            ->route('jabatan.index')
+            ->with('message', 'Data jabatan berhasil ditambahkan');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Jabatan $jabatan)
     {
         //
     }
@@ -41,24 +49,34 @@ class JabatanController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Jabatan $jabatan)
     {
-        //
+        return Inertia::render('Jabatan/Edit', [
+            'jabatan' => $jabatan
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdateJabatanRequest $request, Jabatan $jabatan)
     {
-        //
+        $jabatan->update($request->validated());
+
+        return redirect()
+            ->route('jabatan.index')
+            ->with('message', 'Data jabatan berhasil diupdate');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Jabatan $jabatan)
     {
-        //
+        $jabatan->delete();
+
+        return redirect()
+            ->route('jabatan.index')
+            ->with('message', 'Data jabatan berhasil dihapus');
     }
 }
