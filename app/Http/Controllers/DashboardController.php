@@ -12,7 +12,7 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        return Inertia::render('Dashboard', [
+        return view('dashboard', [
             'totalKaryawan' => Karyawan::count(),
             'totalJabatan' => Jabatan::count()
         ]);

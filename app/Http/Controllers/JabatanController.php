@@ -13,7 +13,7 @@ class JabatanController extends Controller
     public function index()
     {
         $jabatans = Jabatan::latest()->get();
-        return Inertia::render('Jabatan/Index', [
+        return view('jabatan.index', [
             'jabatans' => $jabatans
         ]);
     }
@@ -23,7 +23,7 @@ class JabatanController extends Controller
      */
     public function create()
     {
-        return Inertia::render('Jabatan/Create');
+        return view('jabatan.create');
     }
 
     /**
@@ -51,7 +51,7 @@ class JabatanController extends Controller
      */
     public function edit(Jabatan $jabatan)
     {
-        return Inertia::render('Jabatan/Edit', [
+        return view('jabatan.edit', [
             'jabatan' => $jabatan
         ]);
     }
