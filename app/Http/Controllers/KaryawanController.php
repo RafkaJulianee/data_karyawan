@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Http\Controllers;
+
 use App\Models\Karyawan;
 use App\Models\User;
 use App\Models\Jabatan;
@@ -18,7 +20,7 @@ class KaryawanController extends Controller
                         ->latest()
                         ->get();
 
-        return Inertia::render('Karyawan/Index', [
+        return view('karyawan.index', [
             'karyawans' => $karyawans
         ]);
     }
@@ -31,7 +33,7 @@ class KaryawanController extends Controller
         $users = User::all();
         $jabatans = Jabatan::all();
 
-        return Inertia::render('Karyawan/Create', [
+        return view('karyawan.create', [
             'users' => $users,
             'jabatans' => $jabatans
         ]);
@@ -63,7 +65,7 @@ class KaryawanController extends Controller
     public function edit(Karyawan $karyawan)
     {
         $jabatans = Jabatan::all();
-        return Inertia::render('Karyawan/Edit', [
+        return view('karyawan.edit', [
             'karyawan' => $karyawan,
             'jabatans' => $jabatans
         ]);

@@ -18,7 +18,7 @@ class RoleMiddleware
         if (! $request->user()) { 
             return redirect('/login'); 
         } 
-        if ($request->user()->role->nama_role != $role) { 
+        if (!$request->user()->role || $request->user()->role->nama_role != $role) { 
             abort(403); 
         } 
         return $next($request); 
